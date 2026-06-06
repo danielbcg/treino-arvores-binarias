@@ -107,6 +107,31 @@ public class ABB<K, V> implements IMapeamento<K, V> {
     }
 
 
+    //----------------
+    // agora o remover void
 
+    //faz aqq
+
+    // ------------
+
+
+
+    public int contarFolhas(){
+        return contarFolhas(this.raiz);
+    }
+
+    private int contarFolhas(No<K,V> i) {
+
+        if(i==null){
+            return 0;
+        }
+
+        if(i.getEsq()==null && i.getDir()==null){
+            return 1;
+        }
+
+        return contarFolhas(i.getEsq()) + contarFolhas(i.getDir());
+
+    }
 
 }
