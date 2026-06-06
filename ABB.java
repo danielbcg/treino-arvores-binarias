@@ -134,4 +134,36 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
     }
 
+
+
+
+    public void inserir(K chave, V item){
+
+        raiz = inserir(raiz,chave,item);
+
+    }
+
+    private No<K,V> inserir(No<K,V> i, K chave, V item){
+
+        if(i==null){
+            return new No<>(chave, item);
+        }
+
+        int comp = this.comparador.compare(chave, i.getChave()); 
+
+        if(comp<0){
+            i.setEsq(inserir(i.getEsq(), chave, item));
+        }
+        else if(comp>0){
+            i.setDir(inserir(i.getDir(), chave, item));
+        }
+        else{ //chave ja existe
+            i.setItem(item);
+        }
+
+        return i;
+
+
+    }
+
 }
