@@ -165,4 +165,105 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
     }
 
+
+    //lista de exercicios do gemini
+
+    public int contarNos(No<K,V> i){
+
+        if(i==null){
+            return 0;
+        }
+        else{
+            return 1+contarNos(i.getEsq())+contarNos(i.getDir());
+        }
+
+    }
+
+    public int altura(No<K,V> i){
+
+        if(i==null){
+            return 0;
+        }
+
+        
+
+        
+
+
+    }
+
+    public V pesquisar(K chave, No<K,V> i){
+
+        if(i==null){
+            return null;
+        }
+
+        int comp = this.comparador.compare(chave, i.getChave());
+
+        if(comp>0){
+
+            return pesquisar(chave, i.getDir());
+
+        }
+        else if(comp<0){
+            return pesquisar(chave, i.getEsq());
+        }
+        else{
+            return i.getItem();
+        }
+
+    }
+
+
+
+    public K encontrarMaiorChave() throws Exception{
+
+        if(this.raiz==null){
+            throw new Exception("Árvore vazia.");
+        }
+
+        return encontrarMaiorChave(this.raiz);
+
+    }
+
+    private K encontrarMaiorChave(No<K,V> i){
+
+
+        if(i.getDir()!=null){
+            return encontrarMaiorChave(i.getDir());
+        }
+        else{
+            return i.getChave();
+        }
+
+        
+    }
+
+
+
+    public boolean ehIgual(ABB<K,V> outra){
+
+
+        if(this==outra){
+            return true;
+        }
+        
+
+        return ehIgual(this.raiz, outra.raiz);
+
+    }
+
+    private boolean ehIgual(No<K,V> i, No<K,V> j){
+
+
+    }
+
+
+
+
+
+
+
+
+
 }
