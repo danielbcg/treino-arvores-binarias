@@ -255,6 +255,28 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
     private boolean ehIgual(No<K,V> i, No<K,V> j){
 
+        if(i==null && j==null){
+            return true;
+        }
+        if(i==null && j!=null){
+            return false;
+        }
+        if(i!=null && j==null){
+            return false;
+        }
+
+
+
+        if(!i.getItem().equals(j.getItem())){
+            return false;
+        }
+        if(!i.getChave().equals(j.getChave())){
+            return false;
+        }
+
+        return ehIgual(i.getDir(),j.getDir()) && ehIgual(i.getEsq(), j.getEsq());
+     
+
 
     }
 
