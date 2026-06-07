@@ -42,7 +42,36 @@ public class ABB<K, V> implements IMapeamento<K, V> {
     // Métodos obrigatórios da interface (Stubs apenas para o código rodar)
     @Override
     public void inserir(K chave, V item) {
-        // Sua implementação original de inserção vai aqui
+
+        No<K,V> nóNovo = new No<>();
+        nóNovo.setChave(chave);
+        nóNovo.setItem(item);
+
+        this.raiz=inserir(chave, item, this.raiz, nóNovo);
+
+    }
+
+    public No<K,V> inserir(K chave, V item, No<K,V> i, No<K,V> novoNo){
+
+        if(i==null){
+            return novoNo;
+        }
+
+        int comp = this.comparador.compare(chave, i.getChave());
+
+        if(comp>0){
+            i.setDir(inserir(chave, item, i.getDir(), novoNo));
+        }
+        else if(comp<0){
+            i.setEsq(inserir(chave, item, i.getEsq(), novoNo));
+        }
+        else{
+            i.setItem(item);
+        }
+
+        return i;
+
+
     }
 
     @Override
@@ -137,34 +166,7 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
 
 
-    public void inserir(K chave, V item){
-
-        raiz = inserir(raiz,chave,item);
-
-    }
-
-    private No<K,V> inserir(No<K,V> i, K chave, V item){
-
-        if(i==null){
-            return new No<>(chave,item);
-        }
-
-        int comp = this.comparador.compare(chave, i.getChave());
-
-        if(comp>0){
-            i.setDir(inserir(i.getDir(),chave,item));
-        }
-        else if(comp<0){
-            i.setEsq(inserir(i.getEsq(), chave, item));
-        }
-        else{
-            i.setItem(item);
-        }
-
-        return i;   
-
-    }
-
+    
 
     //lista de exercicios do gemini
 
@@ -279,6 +281,20 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
 
     }
+
+
+
+    public void espelhar(){
+
+        this.raiz = espelhar(this.raiz);
+
+    }
+
+    private No<K, V> espelhar(No<K,V> i){
+
+        
+    }
+
 
 
 
