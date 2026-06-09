@@ -27,7 +27,7 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
         ABB<K,V> novaArvore = new ABB<>();
 
-        novaArvore.raiz = clone(this.raiz);
+        novaArvore.raiz = this.raiz.clone();
 
         return novaArvore;
 
@@ -176,18 +176,7 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
     }
 
-    public int altura(No<K,V> i){
-
-        if(i==null){
-            return 0;
-        }
-
-        
-
-        
-
-
-    }
+    
 
     public V pesquisar(K chave, No<K,V> i){
 
@@ -279,16 +268,152 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
 
 
-    public void espelhar(){
+    
 
-        this.raiz = espelhar(this.raiz);
+    public int tamanho(){
+        return tamanho(this.raiz);
+    }
+
+    private int tamanho(No<K,V> i){
+
+        if(i==null){
+            return 0;
+        }
+
+        return 1+tamanho(i.getEsq())+tamanho(i.getDir());
 
     }
 
-    private No<K, V> espelhar(No<K,V> i){
+    public int altura(No<K,V> i){
 
-        
+        if(i==null){
+            return 0;
+        }
+
+        return 1+Math.max(altura(i.getEsq()), altura(i.getDir()));
+
     }
+
+    public K menorChave() throws Exception{
+
+        if(this.raiz==null){
+            throw new Exception("ARVORE VAZIA");
+        }
+        return menorChave(this.raiz);
+
+    }
+
+    private K menorChave(No<K,V> i){
+
+        if(i.getEsq()==null){
+            return i.getChave();
+        }
+
+        return menorChave(i.getEsq());
+
+    }
+
+    public void imprimirEmOrdem(No<K,V> i){
+
+        if(i!=null){
+            imprimirEmOrdem(i.getEsq());
+            System.out.println(i.toString());
+            imprimirEmOrdem(i.getDir());
+        }
+
+    }
+
+    public int contadorDeFolhas(No<K,V> i){
+
+        if(i==null){
+            return 0;
+        }
+
+        if(i.getEsq()==null && i.getDir()==null){
+            return 1;
+        }
+
+
+        return contadorDeFolhas(i.getEsq())+contadorDeFolhas(i.getDir());
+
+
+    }
+
+
+    public boolean contémChave(K chave) throws Exception{
+
+        return contémChave(this.raiz, chave);
+
+    }
+
+    private boolean contémChave(No<K,V> i , K chave) throws Exception{
+
+        if(i==null){
+            return false; //n é exception, pq ai a chave n foi encontrada
+        }
+
+        int comp = this.comparador.compare(chave, i.getChave());
+
+        if(comp>0){
+            return contémChave(i.getDir(), chave);
+        }
+        else if(comp<0){
+            return contémChave(i.getEsq(), chave);
+        }
+        else{
+            return true;
+        }
+
+
+    }
+
+    public ABB<K,V> espelho(){
+        ABB<K,V> arvoreNova = new ABB<>();
+
+        arvoreNova.raiz = espelho(this.raiz);
+
+        return arvoreNova;
+
+    }
+
+    private No<K,V> espelho(No<K,V> i){
+
+        if(i==null){
+            return null;
+        }
+
+        No<K,V> nóEspelhado = new No<>();
+
+        nóEspelhado.setItem(i.getItem());
+        nóEspelhado.setChave(i.getChave());        
+
+        nóEspelhado.setEsq(espelho(i.getDir()));
+        nóEspelhado.setDir(espelho(i.getEsq()));
+
+        return nóEspelhado;
+
+    }
+
+    public No<K,V> clonarArvoreAUTORAL(No<K,V> i){
+
+        if(i==null){
+            return null;
+        }
+
+        No<K,V> nóClone = new No<>();
+
+        nóClone.setItem(i.getItem());
+        nóClone.setChave(i.getChave());
+
+        nóClone.setEsq(clonarArvoreAUTORAL(i.getEsq()));
+        nóClone.setDir(clonarArvoreAUTORAL(i.getDir()));
+
+        return nóClone;
+
+
+    }
+
+
 
 
 
