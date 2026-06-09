@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class ABB<K, V> implements IMapeamento<K, V> {
     private No<K, V> raiz;
@@ -410,6 +412,70 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
         return nóClone;
 
+
+    }
+
+    
+
+    public int nivel(K chave) throws Exception{
+
+        return nivel(chave, this.raiz);
+
+    }
+
+    private int nivel(K chave, No<K,V> i) throws Exception{
+
+        if(i==null){
+            return -1;
+        }
+
+        int comp = this.comparador.compare(chave,i.getChave());
+
+        if(comp>0){
+            if(nivel(chave,i.getDir())==-1){
+                throw new Exception("CHAVE NAO ENCONTRADA");
+            }
+            return 1+nivel(chave,i.getDir());
+        }
+        else if(comp<0){
+            if(nivel(chave,i.getEsq())==-1){
+                throw new Exception("CHAVE NAO ENCONTRADA");
+            }
+            return 1+nivel(chave,i.getEsq());
+        }
+        else{
+            return 0;
+        }
+
+    }
+
+
+    public List<K> caminho (K chave){
+
+        return caminho(chave, this.raiz, new ArrayList<>());
+
+    }
+
+    private List<K> caminho(K chave, No<K,V> i, List<K> lista){
+
+        if(i==null){
+            return null;
+        }
+
+        int comp = this.comparador.compare(chave, i.getChave());
+
+        if(comp>0){
+            lista.add(i.getChave());
+            return caminho(chave, i.getDir(), lista);
+        }
+        else if(comp<0){
+            lista.add(i.getChave());
+            return caminho(chave, i.getEsq(), lista);
+        }
+        else{
+            lista.add(i.getChave());
+            return lista;
+        }
 
     }
 
