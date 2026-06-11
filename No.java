@@ -145,5 +145,26 @@ public class No<K, V> {
 
     }
 
+
+    public No<K,V> espelhando(){
+
+        No<K,V> noEspelhado = new No<>();
+
+        noEspelhado.setChave(this.getChave());
+        noEspelhado.setItem(this.getItem());
+        
+
+        if(this.getEsq()!=null){
+            noEspelhado.setEsq(this.getDir().espelhando());
+        }
+
+        if(this.getDir()!=null){
+            noEspelhado.setDir(this.getEsq().espelhando());
+        }
+
+        return noEspelhado;
+
+    }
+
     
 }
