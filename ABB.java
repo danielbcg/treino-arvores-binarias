@@ -243,57 +243,6 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
 
 
-    public boolean ehIgual(ABB<K,V> outra){
-
-
-        if(this==outra){
-            return true;
-        }
-        
-
-        return ehIgual(this.raiz, outra.raiz);
-
-    }
-
-    private boolean ehIgual(No<K,V> i, No<K,V> j){
-
-        if(i==null && j==null){
-            return true;
-        }
-        if(i==null && j!=null){
-            return false;
-        }
-        if(i!=null && j==null){
-            return false;
-        }
-
-
-
-        if(!i.getItem().equals(j.getItem())){
-            return false;
-        }
-        if(!i.getChave().equals(j.getChave())){
-            return false;
-        }
-
-        return ehIgual(i.getDir(),j.getDir()) && ehIgual(i.getEsq(), j.getEsq());
-     
-
-
-    }
-
-
-
-    public void espelhar(){
-
-        this.raiz = espelhar(this.raiz);
-
-    }
-
-    private No<K, V> espelhar(No<K,V> i){
-
-        
-    }
 
 
 
