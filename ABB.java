@@ -479,6 +479,31 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
     }
 
+    public boolean iguais(ABB<K,V> outra){
+        return iguais(outra.raiz, this.raiz);
+    }
+
+    private boolean iguais(No<K,V> i, No<K,V> j){
+
+
+        if(i==null && j==null){
+            return true;
+        }
+        if(i==null || j==null){
+            return false;
+        }
+
+        if(!i.getChave().equals(j.getClass())){
+            return false;
+        }
+
+        return iguais(i.getEsq(), j.getEsq()) && iguais(i.getDir(),j.getDir());
+        
+
+    }
+
+    
+
 
 
 
