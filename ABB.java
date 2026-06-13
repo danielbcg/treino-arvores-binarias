@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class ABB<K, V> implements IMapeamento<K, V> {
     private No<K, V> raiz;
@@ -25,16 +27,11 @@ public class ABB<K, V> implements IMapeamento<K, V> {
     
     public ABB<K,V> clone(){
 
-        ABB<K,V> CópiaDaArvore = new ABB<>();
+        ABB<K,V> novaArvore = new ABB<>();
 
-        if(this.raiz!=null){
-            CópiaDaArvore.raiz = this.raiz.clone(this.raiz);
-        }else{
-            CópiaDaArvore.raiz = null;
-        }
+        novaArvore.raiz = this.raiz.clone();
 
-        return CópiaDaArvore;
-
+        return novaArvore;
 
     }
    
@@ -181,18 +178,7 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
     }
 
-    public int altura(No<K,V> i){
-
-        if(i==null){
-            return 0;
-        }
-
-        
-
-        
-
-
-    }
+    
 
     public V pesquisar(K chave, No<K,V> i){
 
@@ -243,13 +229,346 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
 
 
+    public boolean ehIgual(ABB<K,V> outra){
+
+
+        if(this==outra){
+            return true;
+        }
+        
+
+        return ehIgual(this.raiz, outra.raiz);
+
+    }
+
+    private boolean ehIgual(No<K,V> i, No<K,V> j){
+
+        if(i==null && j==null){
+            return true;
+        }
+        if(i==null && j!=null){
+            return false;
+        }
+        if(i!=null && j==null){
+            return false;
+        }
 
 
 
+        if(!i.getItem().equals(j.getItem())){
+            return false;
+        }
+        if(!i.getChave().equals(j.getChave())){
+            return false;
+        }
+
+        return ehIgual(i.getDir(),j.getDir()) && ehIgual(i.getEsq(), j.getEsq());
+     
+
+
+    }
 
 
 
+    
 
+    public int tamanho(){
+        return tamanho(this.raiz);
+    }
+
+    private int tamanho(No<K,V> i){
+
+        if(i==null){
+            return 0;
+        }
+
+        return 1+tamanho(i.getEsq())+tamanho(i.getDir());
+
+    }
+
+    public int altura(No<K,V> i){
+
+        if(i==null){
+            return 0;
+        }
+
+        return 1+Math.max(altura(i.getEsq()), altura(i.getDir()));
+
+    }
+
+    public K menorChave() throws Exception{
+
+        if(this.raiz==null){
+            throw new Exception("ARVORE VAZIA");
+        }
+        return menorChave(this.raiz);
+
+    }
+
+    private K menorChave(No<K,V> i){
+
+        if(i.getEsq()==null){
+            return i.getChave();
+        }
+
+        return menorChave(i.getEsq());
+
+    }
+
+    public void imprimirEmOrdem(No<K,V> i){
+
+        if(i!=null){
+            imprimirEmOrdem(i.getEsq());
+            System.out.println(i.toString());
+            imprimirEmOrdem(i.getDir());
+        }
+
+    }
+
+    public int contadorDeFolhas(No<K,V> i){
+
+        if(i==null){
+            return 0;
+        }
+
+        if(i.getEsq()==null && i.getDir()==null){
+            return 1;
+        }
+
+
+        return contadorDeFolhas(i.getEsq())+contadorDeFolhas(i.getDir());
+
+
+    }
+
+
+    public boolean contémChave(K chave) throws Exception{
+
+        return contémChave(this.raiz, chave);
+
+    }
+
+    private boolean contémChave(No<K,V> i , K chave) throws Exception{
+
+        if(i==null){
+            return false; //n é exception, pq ai a chave n foi encontrada
+        }
+
+        int comp = this.comparador.compare(chave, i.getChave());
+
+        if(comp>0){
+            return contémChave(i.getDir(), chave);
+        }
+        else if(comp<0){
+            return contémChave(i.getEsq(), chave);
+        }
+        else{
+            return true;
+        }
+
+
+    }
+
+    public ABB<K,V> espelho(){
+        ABB<K,V> arvoreNova = new ABB<>();
+
+        arvoreNova.raiz = espelho(this.raiz);
+
+        return arvoreNova;
+
+    }
+
+    private No<K,V> espelho(No<K,V> i){
+
+        if(i==null){
+            return null;
+        }
+
+        No<K,V> nóEspelhado = new No<>();
+
+        nóEspelhado.setItem(i.getItem());
+        nóEspelhado.setChave(i.getChave());        
+
+        nóEspelhado.setEsq(espelho(i.getDir()));
+        nóEspelhado.setDir(espelho(i.getEsq()));
+
+        return nóEspelhado;
+
+    }
+
+    public No<K,V> clonarArvoreAUTORAL(No<K,V> i){
+
+        if(i==null){
+            return null;
+        }
+
+        No<K,V> nóClone = new No<>();
+
+        nóClone.setItem(i.getItem());
+        nóClone.setChave(i.getChave());
+
+        nóClone.setEsq(clonarArvoreAUTORAL(i.getEsq()));
+        nóClone.setDir(clonarArvoreAUTORAL(i.getDir()));
+
+        return nóClone;
+
+
+    }
+
+    
+
+    public int nivel(K chave) throws Exception{
+
+        return nivel(chave, this.raiz);
+
+    }
+
+    private int nivel(K chave, No<K,V> i) throws Exception{
+
+        if(i==null){
+            return -1;
+        }
+
+        int comp = this.comparador.compare(chave,i.getChave());
+
+        if(comp>0){
+            if(nivel(chave,i.getDir())==-1){
+                throw new Exception("CHAVE NAO ENCONTRADA");
+            }
+            return 1+nivel(chave,i.getDir());
+        }
+        else if(comp<0){
+            if(nivel(chave,i.getEsq())==-1){
+                throw new Exception("CHAVE NAO ENCONTRADA");
+            }
+            return 1+nivel(chave,i.getEsq());
+        }
+        else{
+            return 0;
+        }
+
+    }
+
+
+    public List<K> caminho (K chave){
+
+        return caminho(chave, this.raiz, new ArrayList<>());
+
+    }
+
+    private List<K> caminho(K chave, No<K,V> i, List<K> lista){
+
+        if(i==null){
+            return null;
+        }
+
+        int comp = this.comparador.compare(chave, i.getChave());
+
+        if(comp>0){
+            lista.add(i.getChave());
+            return caminho(chave, i.getDir(), lista);
+        }
+        else if(comp<0){
+            lista.add(i.getChave());
+            return caminho(chave, i.getEsq(), lista);
+        }
+        else{
+            lista.add(i.getChave());
+            return lista;
+        }
+
+    }
+
+
+    public boolean iguais(ABB<K,V> outra){
+
+        return iguais(this.raiz, outra.raiz)  ;      
+
+    }
+
+    private boolean iguais(No<K,V> i, No<K,V> j){
+
+        if(i==null && j==null){
+            return true;
+        }
+
+        if(i==null || j==null){ 
+            return false;   
+        }
+
+        if(!i.getChave().equals(j.getChave())){
+            return false;
+        }
+
+        return iguais(i.getEsq(), j.getEsq()) && iguais(i.getDir(), j.getDir());
+
+    }
+
+
+
+    public ABB<K,V> recorte (K min, K max) throws Exception{
+
+        ABB<K,V> subArvoreNova = new ABB<>();
+
+        return recorte(this.raiz, min, max, subArvoreNova);
+
+    }
+
+    private ABB<K,V> recorte(No<K,V> i, K min, K max, ABB<K,V> subArvore) throws Exception{
+
+        if(i==null){
+            return subArvore; //devolve a subarvore com oq foi inserido ate agora
+        }
+
+
+        int compMin = this.comparador.compare(i.getChave(), min);
+        int compMax = this.comparador.compare(i.getChave(), max);
+
+        if(compMin<0){
+            return recorte(i.getDir(), min, max,subArvore);
+        }
+        else if(compMax>0){
+            return recorte(i.getEsq(), min, max,subArvore);
+        }
+        else{
+            subArvore.inserir(i.getChave(), i.getItem());
+            recorte(i.getEsq(), min, max, subArvore);
+            recorte(i.getDir(), min, max, subArvore);
+        }
+
+        return subArvore; //devolve a subarvore inteira completa
+
+    }
+
+
+
+    public Lista<K> chavesMaiores(K chave){
+
+        Lista<K> lista = new Lista<>();
+
+        return chavesMaiores(this.raiz, chave, lista);
+    }
+    
+    private Lista<K> chavesMaiores(No<K,V> no, K chave, Lista<K> lista){
+
+        if(no==null){
+            return null; // claude AI disse que é return lista, pq sera?
+        }
+
+        int comp = this.comparador.compare(chave, no.getChave());
+
+        if(comp>0){
+            return chavesMaiores(no.getDir(), chave, lista);
+        }
+        else{
+            lista.inserirFinal(no.getChave());
+            chavesMaiores(no.getDir(), chave,lista);
+            chavesMaiores(no.getEsq(), chave,lista);
+        }
+
+        return lista;
+
+    }
 
 
 

@@ -21,7 +21,7 @@ public class No<K, V> {
         this.chave = chave;
     }
 
-    public No<K, V> getDir() {
+    public No<K,V> getDir() {
         return this.direita;
     }
 
@@ -37,23 +37,135 @@ public class No<K, V> {
         this.esquerda = esquerda;
     }
 
-    public No<K,V> clone(No<K,V> nóAtual){
+    public No<K,V> clone(){
 
-        if(nóAtual==null){
-            return null;
+        No<K,V> nóClone = new No<>();
+
+        nóClone.setChave(this.getChave());
+        nóClone.setItem(this.getItem());
+
+
+        
+        if(this.getEsq()!=null){
+            
+            nóClone.setEsq(this.getEsq().clone());
+
+        }
+        
+        if(this.getEsq()!=null){
+
+            nóClone.setDir(this.getDir().clone());
+        
         }
 
-        No<K,V> nóClonado = new No<>();
-
-        nóClonado.setChave(nóAtual.getChave());
-        nóClonado.setItem(nóAtual.getItem());
-
-        nóClonado.setEsq(clone(nóAtual.getEsq()));
-        nóClonado.setDir(clone(nóAtual.getDir()));
-
-        return nóClonado;
+        return nóClone;
 
     }
+
+
+    public int tamanho(){
+
+        int esq=0;
+        int dir=0;
+
+        if(this.getEsq()!=null){
+            esq = this.getEsq().tamanho();
+        }
+        if(this.getDir()!=null){
+            dir = this.getDir().tamanho();
+        }
+
+        return 1+dir+esq;
+
+    }
+
+    public int altura(){
+
+        int esq=0;
+        int dir=0;
+
+        if(this.getEsq()!=null){
+            esq = this.getEsq().altura();
+        }
+        if(this.getDir()!=null){
+            dir = this.getDir().altura();
+        }
+
+        int result = Math.max(esq, dir);
+
+        return 1+result;
+
+    }
+
+    public K menorChave(){
+
+        if(this.getEsq()==null){
+            return this.getChave();
+        }
+
+        return this.getEsq().menorChave();
+
+    }
+
+    public void imprimirEmOrdem(){ //emOrdem = esquerda -> raiz -> direita
+
+        if(this.getEsq()!=null){
+            this.getEsq().imprimirEmOrdem();
+        }
+
+        System.out.println(this.toString());
+        
+        if(this.getDir()!=null){
+            this.getDir().imprimirEmOrdem();
+        }
+
+    }
+
+
+
+    public int contadorDeFolhas(){
+
+        
+        int esq=0;
+        int dir=0;
+
+        if(this.getEsq()==null && this.getDir()==null){
+            return 1;
+        }
+        
+        if(this.getEsq()!=null){
+            esq = this.getEsq().contadorDeFolhas();
+        }
+        if(this.getDir()!=null){
+            dir = this.getDir().contadorDeFolhas();
+        }
+
+        return esq+dir;
+        
+
+    }
+
+
+    public No<K,V> espelhando(){
+
+        No<K,V> noEspelhado = new No<>();
+
+        noEspelhado.setChave(this.getChave());
+        noEspelhado.setItem(this.getItem());
+        
+
+        if(this.getEsq()!=null){
+            noEspelhado.setEsq(this.getDir().espelhando());
+        }
+
+        if(this.getDir()!=null){
+            noEspelhado.setDir(this.getEsq().espelhando());
+        }
+
+        return noEspelhado;
+
+    }
+
 
 
     
