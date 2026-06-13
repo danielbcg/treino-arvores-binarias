@@ -506,69 +506,92 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
 
 
-    public ABB<K,V> recorte (K min, K max) throws Exception{
+    public void inserirRec(K chave, V item){
 
-        ABB<K,V> subArvoreNova = new ABB<>();
-
-        return recorte(this.raiz, min, max, subArvoreNova);
+        raiz = inserirRec(raiz, chave, item);
 
     }
 
-    private ABB<K,V> recorte(No<K,V> i, K min, K max, ABB<K,V> subArvore) throws Exception{
+    private No<K,V> inserirRec(No<K,V> i, K chave, V item){
 
         if(i==null){
-            return subArvore; //devolve a subarvore com oq foi inserido ate agora
+            i = new No<>(chave, item);
         }
 
-
-        int compMin = this.comparador.compare(i.getChave(), min);
-        int compMax = this.comparador.compare(i.getChave(), max);
-
-        if(compMin<0){
-            return recorte(i.getDir(), min, max,subArvore);
-        }
-        else if(compMax>0){
-            return recorte(i.getEsq(), min, max,subArvore);
-        }
-        else{
-            subArvore.inserir(i.getChave(), i.getItem());
-            recorte(i.getEsq(), min, max, subArvore);
-            recorte(i.getDir(), min, max, subArvore);
-        }
-
-        return subArvore; //devolve a subarvore inteira completa
-
-    }
-
-
-
-    public Lista<K> chavesMaiores(K chave){
-
-        Lista<K> lista = new Lista<>();
-
-        return chavesMaiores(this.raiz, chave, lista);
-    }
-    
-    private Lista<K> chavesMaiores(No<K,V> no, K chave, Lista<K> lista){
-
-        if(no==null){
-            return null; // claude AI disse que é return lista, pq sera?
-        }
-
-        int comp = this.comparador.compare(chave, no.getChave());
+        int comp = this.comparador.compare(chave, i.getChave());
 
         if(comp>0){
-            return chavesMaiores(no.getDir(), chave, lista);
+            i.setDir(inserirRec(i.getDir(), chave, item));
+        }
+        else if(comp<0){
+            i.setEsq(inserirRec(i.getEsq(), chave, item));
         }
         else{
-            lista.inserirFinal(no.getChave());
-            chavesMaiores(no.getDir(), chave,lista);
-            chavesMaiores(no.getEsq(), chave,lista);
+            throw new IllegalArgumentException("CHAVE JA INSERIDA");
         }
 
-        return lista;
+        return i;
+
 
     }
+
+    //dps faz o removerRec
+
+
+    public void inserirTodos(ABB<K,V> outra){
+        inserirTodos(outra.raiz);
+    }
+
+    private void inserirTodos(No<K,V> no){
+
+        if(no==null){
+            return;
+        }
+
+        this.inserir(no.getChave(), no.getItem());
+        inserirTodos(no.getEsq());
+        inserirTodos(no.getDir());
+
+    }
+
+
+
+    public ABB<K,V> recorte (K min, K max){
+        return recorte(raiz, min, max);
+    }
+
+    private ABB<K,V> recorte(No<K,V> no, K min, K max){
+
+        if(no==null){
+            throw new IllegalArgumentException("ERRO");
+        }
+
+        int compMin = this.comparador.compare(min, no.getChave());
+        int compMax = this.comparador.compare(max, no.getChave());
+
+        if(compMin>0){
+            return recorte(no.getDir(), min, max);
+        }
+        else if(compMax<0){
+            return recorte(no.getEsq(), min, max);
+        }
+        else{
+
+            ABB<K,V> esq = recorte(no.getEsq(), min, max);
+            ABB<K,V> dir = recorte(no.getDir(), min, max);
+
+            esq.inserir(no.getChave(), no.getItem());
+            esq.inserirTodos(dir);
+
+            return esq;
+
+        }
+
+    }
+    
+
+
+
 
 
 
