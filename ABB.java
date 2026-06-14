@@ -538,25 +538,7 @@ public class ABB<K, V> implements IMapeamento<K, V> {
     //dps faz o removerRec
 
 
-    public void inserirTodos(ABB<K,V> outra){
-        inserirTodos(outra.raiz);
-    }
-
-    private void inserirTodos(No<K,V> no){
-
-        if(no==null){
-            return;
-        }
-
-        this.inserir(no.getChave(), no.getItem());
-        inserirTodos(no.getEsq());
-        inserirTodos(no.getDir());
-
-    }
-
-
-
-    public ABB<K,V> recorte (K min, K max){
+    public ABB<K,V> recorte(K min, K max){
         return recorte(raiz, min, max);
     }
 
@@ -588,6 +570,60 @@ public class ABB<K, V> implements IMapeamento<K, V> {
         }
 
     }
+
+    public void inserirTodos(ABB<K,V> arvore){
+        inserirTodos(raiz, arvore);
+    }
+
+    private void inserirTodos(No<K,V> i, ABB<K,V> arvore){
+
+        if(i==null){
+            throw new IllegalArgumentException("ERRO");
+        }
+
+        this.inserir(i.getChave(), i.getItem());
+        arvore.inserirTodos(i.getEsq(), arvore);
+        arvore.inserirTodos(i.getDir(), arvore);
+
+        
+
+    }
+
+
+
+    public Lista<K> chavesMaiores(K chave){
+        Lista<K> lista = new Lista<>();
+        return chavesMaiores(raiz, chave,lista);
+    }
+
+    private Lista<K> chavesMaiores(No<K,V> no, K chave, Lista<K> lista){
+
+        if(no==null){
+            throw new IllegalArgumentException("NÓ VAZIO"); //pq tem q ser return lista? Depois olha melhor isso!
+        }
+
+        int comp = this.comparador.compare(chave, no.getChave());
+
+        if(comp>0){
+            return chavesMaiores(no.getDir(), chave,lista);
+        }
+        else{
+
+            lista.inserirFinal(no.getChave());
+
+            chavesMaiores(no.getEsq(), chave, lista);
+
+            chavesMaiores(no.getDir(), chave, lista);
+
+            return lista;
+
+        }
+
+
+
+    }
+
+
     
 
 
