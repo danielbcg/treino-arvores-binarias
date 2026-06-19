@@ -58,5 +58,18 @@ public class TabelaHashReserva {
     }
 
     public void remover(int chave) {
+
+        if (tabela[hash(chave)]==chave) {
+
+            tabela[hash(chave)]
+            
+        }
+        
+
+
     }
+
+
+
+
 }

@@ -95,4 +95,10 @@ public class Lista<E> {
     }
 
 
+    //importante
+    public Celula<E> getPrimeiro() {
+        return primeiro;
+    }
+
+
 }

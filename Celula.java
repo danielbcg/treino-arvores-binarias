@@ -29,4 +29,6 @@ public class Celula<T> {
 	public void setProximo(Celula<T> proximo) {
 		this.proximo = proximo;
 	}
+
+	
 }
