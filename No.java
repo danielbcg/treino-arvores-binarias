@@ -166,7 +166,24 @@ public class No<K, V> {
 
     }
 
+    //dps apaga se quiser
+    public No<K,V> clonarNo(){
 
+        No<K,V> NÓ_NOVO = new No<>();
+
+        NÓ_NOVO.setChave(this.getChave());
+        NÓ_NOVO.setItem(this.getItem());
+
+
+        if(this.getEsq()!=null){
+            NÓ_NOVO.setEsq(this.getEsq().clonarNo());
+        }
+
+        if(this.getDir()!=null){
+            NÓ_NOVO.setDir(this.getDir().clonarNo());
+        }
+        return NÓ_NOVO;
+    }
 
     
 }
