@@ -1265,4 +1265,143 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
 
 
+
+    public Lista<K> chavesMenores(K chave){
+        return chavesMenores(raiz, chave);
+    }
+
+    private Lista<K> chavesMenores(No<K,V> no, K chave){
+
+        if(no==null){
+            return new Lista<>();
+        }
+
+        int comp = this.comparador.compare(chave, no.getChave());
+
+        if(comp<=0){
+            return chavesMenores(no.getEsq(), chave);
+        }
+
+        else{
+
+            Lista<K> esq = chavesMenores(no.getEsq(), chave);
+            esq.inserir(no.getChave(), esq.getTamanho());
+            Lista<K> dir = chavesMenores(no.getDir(), chave);
+            concatenando(esq, dir);
+
+
+            return esq;
+
+        }
+
+
+
+
+
+
+    }
+
+
+    public void concatenando(Lista<K> lista1, Lista<K> lista2){
+
+        while(!lista2.vazia()){
+
+            lista1.inserir(lista2.remover(0), lista1.getTamanho());
+
+        }
+
+
+    }
+
+
+
+
+
+    public boolean pesquisaValor(V valor){
+        return pesquisaValor(raiz, valor);
+    }
+    private boolean pesquisaValor(No<K,V> no, V valor){
+        if(no==null){
+            return false;
+        }
+
+        if(no.getItem().equals(valor)){
+            return true;
+        }
+
+        return pesquisaValor(no.getEsq(), valor) || pesquisaValor(no.getDir(), valor);
+
+    }
+
+
+
+
+
+
+
+
+
+
+    public int contarMaiores(K chave){
+        return contarMaiores(raiz, chave);
+    }
+
+    private int contarMaiores(No<K,V> no, K chave){
+
+        if(no==null){
+            return 0;
+        }
+
+        int comp = this.comparador.compare(chave, no.getChave());
+
+        if(comp>=0){
+            return contarMaiores(no.getDir(), chave);
+        }
+        else{
+            return 1+contarMaiores(no.getEsq(), chave)+contarMaiores(no.getDir(), chave);
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

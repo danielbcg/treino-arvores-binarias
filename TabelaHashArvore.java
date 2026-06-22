@@ -93,5 +93,42 @@ public class TabelaHashArvore<K, V> {
 
 
 
+    public boolean valorExiste(V valor){
+
+        for(int i=0; i<tamanho;i++){
+
+            if(tabela[i].pesquisaValor(valor)==true){
+                return true;
+            }
+
+        }
+
+        return false;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
