@@ -94,11 +94,6 @@ public class Lista<E> {
     }
 
 
-    //questao da prova
-
-    public Celula<E> getPrimeiro(){
-        return this.primeiro;
-    }
 
 
 
@@ -142,16 +137,92 @@ public class Lista<E> {
 
 
 
+    public void concatenation(Lista<E> outra){
+
+        Celula<E> aux = outra.primeiro.getProximo();
+
+        for(int i=0;i<outra.getTamanho();i++){
+
+            this.inserir(aux.getItem(), this.getTamanho());
+            aux=aux.getProximo();
+
+        }
+
+    }
+
+
+
+
+
+
     public E get(int posicao){
 
         Celula<E> aux = this.primeiro.getProximo();
 
-        for(int i=0; i<posicao ;i++){
+        for(int i=0; i<posicao;i++){
+
             aux=aux.getProximo();
+
+
         }
+
         return aux.getItem();
 
+
+
     }
+
+
+
+
+
+
+
+
+    public boolean valorExiste(E atual){
+
+        Celula<E> aux = this.primeiro.getProximo();
+
+        while(aux!=null){
+
+            if(aux.getItem().equals(atual)){
+                return true;
+            }
+
+            aux=aux.getProximo();
+
+        }
+
+        return false;
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

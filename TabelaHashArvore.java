@@ -112,8 +112,70 @@ public class TabelaHashArvore<K, V> {
 
 
 
+    public int contarNivelMaximo(){
+
+        int maiorAltura=0;
+
+        for(int i=0; i<tamanho;i++){
+
+            if(tabela[i].getAltura()>maiorAltura){
+                maiorAltura=tabela[i].getAltura();
+            }
+
+        }
+
+        return maiorAltura;
 
 
+
+    }
+
+
+
+
+
+
+
+
+
+    public Lista<K> obterTodasAsChaves(){
+    
+        Lista<K> lista = new Lista<>();
+
+        for(int i=0;i<tamanho;i++){
+
+            tabela[i].todasAsChaves(lista);
+
+        }
+    
+        return lista;
+
+
+    }
+
+
+
+
+
+
+
+    public boolean todasArvoresBalanceadas(){
+
+
+
+        for(int i=0; i<tamanho;i++){
+
+            if(tabela[i].balanceada()>1){
+                return false;
+            }
+
+        }
+
+        return true;
+
+
+
+    }
 
 
 

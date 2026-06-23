@@ -1013,6 +1013,23 @@ public class ABB<K, V> implements IMapeamento<K, V> {
         }
 
 
+        public int getAltura(){
+
+            return getAltura(raiz);
+
+        }
+
+        private int getAltura(No<K,V> no){
+
+            if(no==null){
+                return 0;
+            }
+
+            return 1+Math.max(getAltura(no.getEsq()),getAltura(no.getDir()));
+
+        }
+
+
 
         
 
@@ -1376,6 +1393,23 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
 
 
+    public Lista<K> todasAsChaves(Lista<K> lista){ 
+        return todasAsChaves(raiz,lista); 
+    }
+
+    private Lista<K> todasAsChaves(No<K,V> no, Lista<K> lista){
+
+        if(no==null){
+            return lista;
+        }
+
+        todasAsChaves(no.getEsq(),lista);
+        lista.inserir(no.getChave(),lista.getTamanho());
+        todasAsChaves(no.getDir(), lista);
+
+        return lista;
+
+    }
 
 
 
@@ -1384,8 +1418,166 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
 
 
+    public int profundidadeDaChave(K chave){ //raiz = nivel 1
+        return profundidadeDaChave(raiz, chave, 1);
+    }
+    
+    private int profundidadeDaChave(No<K,V> no, K chave, int nivel){
+
+        if(no==null){
+            return -1;
+        }
+
+        int comp = this.comparador.compare(chave, no.getChave());
+
+        if(comp>0){
+            return profundidadeDaChave(no.getDir(), chave, nivel+1);
+        }
+
+        else if(comp<0){
+            return profundidadeDaChave(no.getEsq(), chave, nivel+1);
+        }
+
+        else{
+            return nivel;
+        }
+
+    }
 
 
+
+
+
+
+    //dps olha esses codigos de subarvore
+    public boolean possuiSubarvore(ABB<K,V> outra){
+
+        return possuiSubarvore(raiz,outra.raiz);
+
+    }
+
+    private boolean possuiSubarvore(No<K,V> noThis, No<K,V> noOutra){
+
+        if(noThis==null && noOutra!=null){
+            return false;
+        }
+        else if(noThis!=null && noOutra==null){
+            return false;
+        }
+
+
+        if(comparaArvores(noThis, noOutra)==true){
+            return true;
+        }
+
+        return possuiSubarvore(noThis.getEsq(), noOutra)||possuiSubarvore(noThis.getDir(), noOutra);
+
+
+    }
+
+    
+
+    public boolean comparaArvores(No<K,V> no, No<K,V> noOutro){
+
+        if(no==null && noOutro==null){
+            return true;
+        }
+
+        if(no==null || noOutro==null){
+            return false;
+        }
+
+        if(!no.getChave().equals(noOutro.getChave())){
+            return false;
+        }
+
+        if(!no.getItem().equals(noOutro.getItem())){
+            return false;
+        }
+
+        return comparaArvores(no.getEsq(), noOutro.getEsq())&&comparaArvores(no.getDir(), noOutro.getDir());
+
+    }
+
+
+
+
+
+
+
+    public ABB<K, V> filtrarPorValor(V valor){
+
+        return filtrarPorValor(valor, raiz);
+
+    }
+
+    private ABB<K, V> filtrarPorValor(V valor, No<K,V> no){
+
+        if(no==null){
+            return new ABB<>();
+        }
+
+        ABB<K,V> esq = filtrarPorValor(valor, no.getEsq());
+        
+        if(no.getItem().equals(valor)){
+            esq.inserir(no.getChave(), no.getItem());
+        }
+
+        ABB<K,V> dir = filtrarPorValor(valor, no.getDir());
+        esq.concatenaçaoArvores(dir);
+
+        
+        return esq;
+
+
+
+    }
+
+
+    public void concatenaçaoArvores(ABB<K,V> outra){
+        concatenaçaoArvores(outra.raiz);
+    }
+
+    private void concatenaçaoArvores(No<K,V> no){
+
+        if(no==null){
+            return;
+        }
+
+        concatenaçaoArvores(no.getEsq());
+        this.inserir(no.getChave(), no.getItem());
+        concatenaçaoArvores(no.getDir());
+
+    }
+
+
+
+
+
+
+
+    public int balanceada(){
+
+        return balanceada(this.raiz);
+
+    }
+
+    private int balanceada(No<K,V> no){
+
+        if(no==null){
+            return 0;
+        }
+
+
+
+        int esq = balanceada(no.getEsq());
+
+        int dir = balanceada(no.getDir());
+
+        return 1+Math.max(esq, dir);
+
+
+    }
 
 
 
