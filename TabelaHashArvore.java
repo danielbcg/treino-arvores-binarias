@@ -181,6 +181,31 @@ public class TabelaHashArvore<K, V> {
 
 
 
+    public V pesquisar(K chave){
+
+        V valor = null;
+
+        int posicao = hash(chave);
+
+        valor = tabela[posicao].retornaValor(chave);
+
+        return valor;
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

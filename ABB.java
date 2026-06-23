@@ -1591,7 +1591,34 @@ public class ABB<K, V> implements IMapeamento<K, V> {
 
 
 
+    public V retornaValor(K chave){
 
+        return retornaValor(this.raiz, chave);
+
+    }
+
+
+    private V retornaValor(No<K,V> no, K chave){
+
+        if(no==null){
+            return null;
+        }
+
+        int comp = this.comparador.compare(chave, no.getChave());
+
+        if(comp>0){
+            return retornaValor(no.getDir(), chave);
+        }
+        else if(comp<0){
+            return retornaValor(no.getEsq(), chave);
+        }
+        else{
+            return no.getItem();
+        }
+        
+
+
+    }
 
 
 

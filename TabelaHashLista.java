@@ -201,8 +201,9 @@ public class TabelaHashLista<K, V> {
 
             for(int j=0; j<tabela[i].getTamanho();j++){
 
-                Entrada<K,V> chaveAtual = atual.get(j);
-                lista.inserir(chaveAtual.getChave(), lista.getTamanho());
+                Entrada<K,V> entradaAtual = atual.get(j);
+                K chaveAtual = entradaAtual.getChave();
+                lista.inserir(chaveAtual, lista.getTamanho());
 
             }
 
